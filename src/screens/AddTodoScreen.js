@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { addTodo } from '../redux/todoSlice';
+import { addTodo } from '../redux/action/todoAction';
 
 export default function AddTodoScreen({ navigation }) {
   const [text, setText] = useState('');

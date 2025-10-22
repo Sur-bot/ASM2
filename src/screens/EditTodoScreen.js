@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { updateTodo } from '../redux/todoSlice';
+import { updateTodo } from '../redux/action/todoAction';
 
 export default function EditTodoScreen({ route, navigation }) {
   const { id } = route.params;

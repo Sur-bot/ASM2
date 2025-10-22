@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Button } from 'react-native';
 import { useDispatch, useSelector } from 'react-redux';
-import { deleteTodo } from '../redux/todoSlice';
+import { deleteTodo } from '../redux/action/todoAction';
 
 export default function DeleteTodoScreen({ route, navigation }) {
   const { id } = route.params;
