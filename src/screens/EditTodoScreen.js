@@ -13,6 +13,6 @@ export default function EditTodoScreen({ route, navigation }) {
     <View style={{ flex: 1, padding: 20 }}>
       <TextInput value={newText} onChangeText={setNewText} style={{ borderWidth: 1, padding: 10, marginBottom: 10 }} />
       <Button title="Lưu thay đổi" onPress={() => { dispatch(updateTodo({ id, newText })); navigation.goBack(); }} />
-    </View>
+    </View> 
   );
 }
