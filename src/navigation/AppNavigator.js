@@ -4,6 +4,7 @@ import TodoListScreen from '../screens/TodoListScreen';
 import AddTodoScreen from '../screens/AddTodoScreen';
 import EditTodoScreen from '../screens/EditTodoScreen';
 import DeleteTodoScreen from '../screens/DeleteTodoScreen';
+import SearchTodoScreen from '../screens/SearchTodoScreen';
 
 const Stack = createStackNavigator();
 
@@ -14,6 +15,7 @@ export default function AppNavigator() {
       <Stack.Screen name="AddTodo" component={AddTodoScreen} options={{ title: 'Thêm công việc' }} />
       <Stack.Screen name="EditTodo" component={EditTodoScreen} options={{ title: 'Sửa công việc' }} />
       <Stack.Screen name="DeleteTodo" component={DeleteTodoScreen} options={{ title: 'Xóa công việc' }} />
+      <Stack.Screen name="SearchTodo" component={SearchTodoScreen} options={{ title: 'Tìm kiếm công việc' }} />
     </Stack.Navigator>
   );
 }

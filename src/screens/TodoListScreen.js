@@ -5,17 +5,24 @@ import { Ionicons } from '@expo/vector-icons';
 
 
 export default function TodoListScreen({ navigation }) {
-  const todos = useSelector(state => state.todos.todos);
+  const todos = useSelector(state => state.todos);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
   const [newText, setNewText] = useState('');
   const dispatch = useDispatch();
   return (
     <View style={{ flex: 1, padding: 20 }}>
-      <Button title="Thêm công việc" onPress={() => navigation.navigate('AddTodo')} />
+      <Button
+        title="Tìm kiếm công việc"
+        onPress={() => navigation.navigate("SearchTodo")}
+      />
+      <Button
+        title="Thêm công việc"
+        onPress={() => navigation.navigate("AddTodo")}
+      />
       <FlatList
         data={todos}
-        keyExtractor={item => item.id.toString()}
+        keyExtractor={(item) => item.id.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => { setSelectedTodo(item); setNewText(item.text); setModalVisible(true) }} onLongPress={() => navigation.navigate('DeleteTodo', { id: item.id })}>
             <View style={styles.item}>
