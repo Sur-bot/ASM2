@@ -26,7 +26,18 @@ export default function TodoListScreen({ navigation }) {
         renderItem={({ item }) => (
           <TouchableOpacity onPress={() => { setSelectedTodo(item); setNewText(item.text); setModalVisible(true) }} onLongPress={() => navigation.navigate('DeleteTodo', { id: item.id })}>
             <View style={styles.item}>
-              <Text style={{ fontSize: 18, textDecorationLine: item.completed ? 'line-through' : 'none' }}>{item.text}</Text>
+              <View style={styles.itemContent}>
+                                <Text style={styles.itemText}>
+                                    <Text style={styles.label}>Tên:</Text> {item.text}
+                                </Text>
+                                <Text style={styles.itemDate}>
+                                    <Text style={styles.label}>Bắt đầu:</Text> {new Date(item.startDate).toLocaleDateString()}
+                                </Text>
+                                <Text style={styles.itemDate}>
+                                    <Text style={styles.label}>Kết thúc:</Text> {new Date(item.endDate).toLocaleDateString()}
+                                </Text>
+                            </View>
+
               <Ionicons name="create-outline" size={30} color="black" />
             </View>
           </TouchableOpacity>
