@@ -27,7 +27,6 @@ export default function SearchTodoScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Tìm kiếm công việc</Text>
 
-      {/* Ô nhập từ khóa */}
       <TextInput
         style={styles.input}
         placeholder="Nhập từ khóa tìm kiếm ..."
@@ -35,7 +34,6 @@ export default function SearchTodoScreen({ navigation }) {
         onChangeText={setKeyword}
       />
 
-      {/* Bộ lọc thời gian */}
       <View style={styles.dateFilter}>
         <TouchableOpacity
           style={styles.dateButton}

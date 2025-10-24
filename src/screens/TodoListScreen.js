@@ -147,7 +147,10 @@ const styles = StyleSheet.create({
   txtInput: {
     width: '90%',
     borderWidth: 1, padding: 10, marginBottom: 10
-  }
+  },
+  label: {
+    fontWeight: 'bold',
+  },
 
 });
 
