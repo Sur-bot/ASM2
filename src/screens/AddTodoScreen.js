@@ -16,21 +16,25 @@ export default function AddTodoScreen({ navigation }) {
     const dispatch = useDispatch();
 
     const onChangeStartDate = (event, selectedDate) => {
-        setShowStartDatePicker(false); 
-        // Dùng optional chaining (?.) để tránh crash
-        if (event?.type === 'set' && selectedDate) {
-            if (endDate && selectedDate > endDate) {
-                setEndDate(null); // Reset ngày kết thúc nếu không hợp lệ
+        console.log(event, selectedDate)
+        if (event.type === 'set') {
+            const currentDate = selectedDate || startDate;
+            if (endDate && currentDate > endDate) {
+                setEndDate(null);
             }
-            setStartDate(selectedDate);
+            
+            setStartDate(currentDate);
         }
+        setShowStartDatePicker(false);
     };
 
     const onChangeEndDate = (event, selectedDate) => {
-        setShowEndDatePicker(false); 
-        if (event?.type === 'set' && selectedDate) {
-            setEndDate(selectedDate);
+        console.log(event, selectedDate)
+        if (event.type === 'set') {
+            const currentDate = selectedDate || endDate;
+            setEndDate(currentDate);
         }
+        setShowEndDatePicker(false);
     };
 
     const handleAddTodo = () => {
@@ -39,21 +43,21 @@ export default function AddTodoScreen({ navigation }) {
             return;
         }
 
-        dispatch(addTodo({ 
-            text, 
-            startDate: startDate.toISOString(), 
-            endDate: endDate.toISOString() 
+        dispatch(addTodo({
+            text,
+            startDate: startDate.toISOString(),
+            endDate: endDate.toISOString()
         }));
         navigation.goBack();
     };
 
     return (
         <View style={styles.container}>
-            <TextInput 
-                placeholder="Nhập công việc mới..." 
-                value={text} 
-                onChangeText={setText} 
-                style={styles.input} 
+            <TextInput
+                placeholder="Nhập công việc mới..."
+                value={text}
+                onChangeText={setText}
+                style={styles.input}
             />
             <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
                 <Text style={styles.datePickerText}>
@@ -103,45 +107,45 @@ export default function AddTodoScreen({ navigation }) {
 }
 // Styles (giữ nguyên)
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: '#fff',
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 10,
-    marginBottom: 20,
-    borderRadius: 5,
-  },
-  datePickerButton: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    padding: 15,
-    marginBottom: 20,
-    borderRadius: 5,
-    alignItems: 'center',
-  },
-  datePickerText: {
-    fontSize: 16,
-  },
-  modalOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  modalContainer: {
-    width: '80%',
-    backgroundColor: 'white',
-    padding: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  modalText: {
-    fontSize: 16,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
+    container: {
+        flex: 1,
+        padding: 20,
+        backgroundColor: '#fff',
+    },
+    input: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        marginBottom: 20,
+        borderRadius: 5,
+    },
+    datePickerButton: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 15,
+        marginBottom: 20,
+        borderRadius: 5,
+        alignItems: 'center',
+    },
+    datePickerText: {
+        fontSize: 16,
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContainer: {
+        width: '80%',
+        backgroundColor: 'white',
+        padding: 20,
+        borderRadius: 10,
+        alignItems: 'center',
+    },
+    modalText: {
+        fontSize: 16,
+        marginBottom: 20,
+        textAlign: 'center',
+    },
 });

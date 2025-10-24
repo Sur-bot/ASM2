@@ -2,14 +2,35 @@ import React, { useState } from 'react';
 import { View, Text, FlatList, TouchableOpacity, Button, StyleSheet, Modal, TextInput, Pressable } from 'react-native';
 import { useSelector, useDispatch } from 'react-redux';
 import { Ionicons } from '@expo/vector-icons';
-
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { updateTodo } from '../redux/action/todoAction';
 
 export default function TodoListScreen({ navigation }) {
   const todos = useSelector(state => state.todos);
   const [modalVisible, setModalVisible] = useState(false);
   const [selectedTodo, setSelectedTodo] = useState(null);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [showStartDatePicker, setShowStartDatePicker] = useState(false);
+  const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [newText, setNewText] = useState('');
   const dispatch = useDispatch();
+  const onChangeStartDate = (event, selectedDate) => {
+    setShowStartDatePicker(false);
+    // Dùng optional chaining (?.) để tránh crash
+    if (event?.type === 'set' && selectedDate) {
+      if (endDate && selectedDate > endDate) {
+        setEndDate(null); // Reset ngày kết thúc nếu không hợp lệ
+      }
+      setStartDate(selectedDate);
+    }
+  };
+  const onChangeEndDate = (event, selectedDate) => {
+    setShowEndDatePicker(false);
+    if (event?.type === 'set' && selectedDate) {
+      setEndDate(selectedDate);
+    }
+  };
   return (
     <View style={{ flex: 1, padding: 20 }}>
       <Button
@@ -27,16 +48,16 @@ export default function TodoListScreen({ navigation }) {
           <TouchableOpacity onPress={() => { setSelectedTodo(item); setNewText(item.text); setModalVisible(true) }} onLongPress={() => navigation.navigate('DeleteTodo', { id: item.id })}>
             <View style={styles.item}>
               <View style={styles.itemContent}>
-                                <Text style={styles.itemText}>
-                                    <Text style={styles.label}>Tên:</Text> {item.text}
-                                </Text>
-                                <Text style={styles.itemDate}>
-                                    <Text style={styles.label}>Bắt đầu:</Text> {new Date(item.startDate).toLocaleDateString()}
-                                </Text>
-                                <Text style={styles.itemDate}>
-                                    <Text style={styles.label}>Kết thúc:</Text> {new Date(item.endDate).toLocaleDateString()}
-                                </Text>
-                            </View>
+                <Text style={styles.itemText}>
+                  <Text style={styles.label}>Tên:</Text> {item.text}
+                </Text>
+                <Text style={styles.itemDate}>
+                  <Text style={styles.label}>Bắt đầu:</Text> {new Date(item.startDate).toLocaleDateString()}
+                </Text>
+                <Text style={styles.itemDate}>
+                  <Text style={styles.label}>Kết thúc:</Text> {new Date(item.endDate).toLocaleDateString()}
+                </Text>
+              </View>
 
               <Ionicons name="create-outline" size={30} color="black" />
             </View>
@@ -48,7 +69,35 @@ export default function TodoListScreen({ navigation }) {
         <Pressable style={styles.modalBackground} onPress={(evt) => evt.target == evt.currentTarget ? setModalVisible(false) : setModalVisible(true)}>
           <View style={styles.modalContent}>
             <TextInput style={styles.txtInput} value={newText} onChangeText={setNewText} />
-            <Button title="Lưu thay đổi" onPress={() => { dispatch(updateTodo({ id, newText })); setModalVisible(false); }} />
+            <TouchableOpacity onPress={() => setShowStartDatePicker(true)} style={styles.datePickerButton}>
+              <Text style={styles.datePickerText}>
+                {startDate ? `Bắt đầu: ${startDate.toLocaleDateString()}` : 'Chọn ngày bắt đầu'}
+              </Text>
+            </TouchableOpacity>
+            
+            <TouchableOpacity onPress={() => setShowEndDatePicker(true)} style={styles.datePickerButton}>
+              <Text style={styles.datePickerText}>
+                {endDate ? `Kết thúc: ${endDate.toLocaleDateString()}` : 'Chọn ngày kết thúc'}
+              </Text>
+            </TouchableOpacity>
+             {showStartDatePicker && (
+                <DateTimePicker
+                    value={startDate || new Date()}
+                    mode="date"
+                    display="default"
+                    onChange={onChangeStartDate}
+                />
+            )}
+            {showEndDatePicker && (
+              <DateTimePicker
+                value={endDate || startDate || new Date()}
+                mode="date"
+                display="default"
+                onChange={onChangeEndDate}
+                minimumDate={startDate || new Date()}
+              />
+            )}
+            <Button title="Lưu thay đổi" onPress={() => { dispatch(updateTodo({ id: selectedTodo.id, newText,startDate: startDate ? startDate.toISOString() : selectedTodo.startDate,endDate: endDate ? endDate.toISOString() : selectedTodo.endDate  })); setModalVisible(false); }} />
           </View>
         </Pressable>
       </Modal>
@@ -89,6 +138,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingVertical: 10,
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 
   txtInput: {
